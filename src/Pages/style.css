@@ -1,0 +1,25 @@
+@media all and (min-width: 480px) {
+    .Center {
+      padding: 250px 0;
+    }
+  
+    .Center form {
+      margin: auto;
+      max-width: 400px;
+    }
+
+    .Center Button
+    {
+        margin-left: 40%;
+    }
+
+    .bg-grey-color
+    {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .no-decor
+    {
+      text-decoration: none;
+    }
+  }
