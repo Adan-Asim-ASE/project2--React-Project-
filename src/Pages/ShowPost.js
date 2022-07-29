@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useLocation } from 'react-router-dom';
-import Makecomment from './Makecomment';
+import { Link, useParams } from 'react-router-dom';
+import Makecomment from './MakeComment';
 import './style.css';
 
-export default function Showpost() {
-    const loc = useLocation();
-    const pid = loc.state.pid;
+export default function ShowPost() {
+    const id = useParams();
+    const pid = Number(id.id);
+
     const [uid] = useState(JSON.parse(localStorage.getItem('currentUser')).Id);
 
     const [post] = useState(JSON.parse(localStorage.getItem('posts')).find(p => (p.id === pid)));
@@ -36,7 +37,7 @@ export default function Showpost() {
 
     return (
         <div className="Showpost">
-            <Link to='/main' state={{ userId: uid }} className="btn btn-outline-primary m-4"> Back</Link>
+            <Link to='/Home' state={{ userId: uid }} className="btn btn-outline-primary m-4"> Back</Link>
             {
                 post === undefined ? null :
                     <div className="m-5">
@@ -55,7 +56,7 @@ export default function Showpost() {
                                         comment.userId !== uid ? null :
                                             (
                                                 <div className="text-end mt-2">
-                                                    <Link to={'/Editcomment'} state={{ comment: comment, comments: comments, pid: post.id, userId: post.userId }} className="btn btn-outline-primary btn-md me-3">Modify</Link>
+                                                    <Link to={'/Post/' + post.id + '/Comment/' + comment.id + '/edit'} state={{ comment: comment, comments: comments, pid: post.id, userId: post.userId }} className="btn btn-outline-primary btn-md me-3">Modify</Link>
                                                     <button onClick={() => removeComment(comment.id)} className="btn btn-outline-primary btn-md me-2">Delete </button>
                                                 </div>
                                             )

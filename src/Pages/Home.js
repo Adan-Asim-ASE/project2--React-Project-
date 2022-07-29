@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-import Makepost from "./makePost";
+import Makepost from "./MakePost";
 import './style.css';
 
 
@@ -13,18 +13,18 @@ export default function Main() {
     useEffect(() => {
         const posts = localStorage.getItem('posts');
         if (posts == null || posts === undefined) {
-            fetch(process.env.REACT_POSTS_API)
+            fetch("https://jsonplaceholder.typicode.com/posts")
                 .then(response => response.json())
                 .then(data => {
                     setPosts(data)
+                    console.log(data)
                     localStorage.setItem('posts', JSON.stringify(data));
-                })
+                });
         }
         else {
             setPosts(JSON.parse(posts));
         }
     }, []);
-
 
     function removePost(pid) {
         const updatedPosts = posts.filter(p => (p.id !== pid));
@@ -49,11 +49,11 @@ export default function Main() {
                             <h2 className="text-center text-primary mb-4">{post.title}</h2>
                             <p className="lead text-dark text-center">{post.body}</p>
                             <p className="text-end mt-55522255 me-4 text-black-50"><i>(This post#{post.id} was made by user# {post.userId})</i></p>
-                            <Link to={'/Showpost'} state={{ pid: post.id, uid: uid }} className="no-decor"> Show Comments...</Link>
+                            <Link to={'/Post/' + post.id} state={{ pid: post.id, uid: uid }} className="no-decor"> Show Comments...</Link>
                             {
                                 post.userId !== uid ? null :
                                     <div className="text-end mt-2">
-                                        <Link to={'/Editpost'} state={{ post: post, posts: posts }} className="btn btn-outline-primary btn-md me-3">Modify</Link>
+                                        <Link to={'/Post/' + post.id + '/edit'} state={{ post: post, posts: posts }} className="btn btn-outline-primary btn-md me-3">Modify</Link>
                                         <button onClick={() => removePost(post.id)} className="btn btn-outline-primary btn-md me-2">Delete </button>
                                     </div>
                             }

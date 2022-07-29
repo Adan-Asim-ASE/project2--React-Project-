@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import './style.css';
 
-export default function Editcomment() {
+export default function EditComment() {
     const loc = useLocation();
     let comment = loc.state.comment;
     let [comments] = useState(loc.state.comments);
     let pid = loc.state.pid;
     let userId = loc.state.userId;
+
+    const id = useParams();
+    console.log(id);
     const navigate = useNavigate();
 
     let [content, setContent] = useState(comment.body);
@@ -25,12 +28,12 @@ export default function Editcomment() {
     function submit(event) {
         event.preventDefault();
         let index = comments.findIndex((data) => data.id === comment.id);
-        if (index) {
+        if (index !== -1) {
             comments[index].body = content;
         }
         localStorage.setItem('comments' + pid, JSON.stringify(comments));
 
-        navigate('/Showpost', { state: { pid: pid, uid: userId } });
+        navigate('/Post/' + pid, { state: { pid: pid, uid: userId } });
     }
 
     return (

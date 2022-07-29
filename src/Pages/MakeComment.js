@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import './style.css';
 
-export default function Makecomment({ comments, setComment, userId, postId }) {
+export default function MakeComment({ comments, setComment, userId, postId }) {
     let [content, setContent] = useState("");
     let [user] = useState(JSON.parse(localStorage.getItem('currentUser')));
     let cid = 1;
@@ -25,19 +25,15 @@ export default function Makecomment({ comments, setComment, userId, postId }) {
 
         let updatedComments;
         if (comments === null)
-            updatedComments = new Array(comment);
+            updatedComments = [comment];
         else {
             updatedComments = [...comments];
-
             updatedComments.push(comment);
         }
 
         setComment(updatedComments);
-
         localStorage.setItem('comments' + postId, JSON.stringify(updatedComments));
-
         setContent("");
-        window.location.reload();
     }
 
     return (

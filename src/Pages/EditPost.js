@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import './style.css';
 
-export default function Makepost({ posts, setPosts }) {
-    let [title, setTitle] = useState("");
-    let [content, setContent] = useState("");
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    let pid = posts.length + 1;
+export default function EditPost() {
+    const loc = useLocation();
+    let post = loc.state.post;
+    let posts = loc.state.posts;
+
+    const id = useParams();
+    console.log(id);
+    const navigate = useNavigate();
+
+    let [title, setTitle] = useState(post.title);
+    let [content, setContent] = useState(post.body);
 
     function validate() {
-        if (title.length && content.length) {
+        if (title.length > 0 && content.length > 0) {
             return true;
         }
         return false;
@@ -18,24 +26,20 @@ export default function Makepost({ posts, setPosts }) {
 
     function submit(event) {
         event.preventDefault();
-        let post = { title: title, body: content, id: pid, userId: user.Id };
-        
-        const updatedPosts = [...posts]; 
-        updatedPosts.push(post);
-        setPosts(updatedPosts);
+        let index = posts.findIndex((data) => data.id === post.id);
 
-        localStorage.setItem('posts', JSON.stringify(updatedPosts));
+        posts[index].title = title;
+        posts[index].body = content;
 
-        setTitle("");
-        setContent("");
-        console.log(posts);
-        //window.location.reload();
+        localStorage.removeItem('posts');
+        localStorage.setItem('posts', JSON.stringify(posts));
+        navigate('/Home', { state: { userId: post.userId } });
     }
 
     return (
         <div className="">
             <Form onSubmit={submit} className="block-example border border-light bg-grey-color p-4 m-5">
-                <h2 className="mb-4 mt-2 text-primary text-center"><strong>Create New Post</strong></h2>
+                <h2 className="mb-4 mt-2 text-primary text-center"><strong>Edit Post</strong></h2>
                 <hr />
                 <Form.Group className="mb-3" controlId="Title">
                     <Form.Label className="left-margin mb-3 mt-2"><strong>Title</strong></Form.Label>
@@ -57,7 +61,7 @@ export default function Makepost({ posts, setPosts }) {
                 </Form.Group>
                 <div className="text-end">
                     <Button className="mt-4 mb-2" block size="md" type="submit" disabled={validate}>
-                        Create
+                        Update
                     </Button>
                 </div>
             </Form>

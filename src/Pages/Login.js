@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from 'react-router';
-import userContext from "./userContext";
+import userContext from "../Context/userContext";
 import './style.css';
 
 
@@ -41,7 +41,7 @@ export default function Login() {
             alert("Invalid Email Password");
         }
         else
-            navigate('/main', { state: { userId } });
+            navigate('/Home', { state: { userId } });
     }
 
     return (
